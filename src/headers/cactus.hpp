@@ -7,9 +7,11 @@
 #define smallCactuWidth 23
 #define smallCactuHeight 46
 
-// TODO: static cactus width in image
-#define bigCactuWidth null
-#define bigCactuHeight null
+#define bigCactuWidth 33 
+#define bigCactuHeight 67 
+
+#define specialCactuWidth 67
+#define specialCactuHeight 67
 
 class Cactu
 {
@@ -21,6 +23,7 @@ class Cactu
 	private:
 
 		bool isOutsideOfMap;
+		uint8_t texture;
 		Vector2 pos;
 };
 

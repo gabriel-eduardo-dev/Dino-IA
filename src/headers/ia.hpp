@@ -2,6 +2,9 @@
 #define IA_HPP
 
 #include <cstdint>
+#include <vector>
+
+#include <raylib.h>
 
 #include "dino.hpp"
 #include "bird.hpp"
@@ -21,8 +24,8 @@ class IA
 		static void dinoUpdate();
 		static void dinoDraw();
 
-		static void enemysUpdate();
-		static void enemysDraw();
+		inline static std::vector<Dino> dinos;
+		inline static float time;
 };
 
 #endif // !IA_HPP

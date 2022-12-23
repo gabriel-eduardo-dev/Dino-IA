@@ -73,6 +73,10 @@ void IA::Update()
                 dino.pos.y = ground_pos_y - upDinoHeight;
 				dino.onGround = true;
 			}
+			dino.score++;
+
+			// TODO: colisions
+			// TODO: ia stuff
         }
 	}
 }

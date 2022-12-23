@@ -3,7 +3,6 @@
 
 #include "headers/global.hpp"
 #include "headers/ia.hpp"
-#include "headers/bird.hpp"
 
 bool pause = false;
 float ground_x = 0;

@@ -7,8 +7,6 @@
 #include <raylib.h>
 
 #include "dino.hpp"
-#include "bird.hpp"
-#include "cactus.hpp"
 
 class IA
 {

@@ -8,7 +8,7 @@
 #define screen_height 720
 
 #define TOTAL_DINOS 10
-#define GRAVITY 1
+#define GRAVITY 5
 
 extern Texture2D ground;
 extern Texture2D upDino;

@@ -11,6 +11,7 @@ Dino::Dino()
 	texture = 1;
 	state = State::UP_RUNNING;
 	changedState = false;
+	onGround = true;
 }
 
 Dino::~Dino()

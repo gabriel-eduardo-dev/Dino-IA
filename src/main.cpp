@@ -27,6 +27,9 @@ int32_t main (int argc, char *argv[])
 	Init();
 	while (!WindowShouldClose())
 	{
+		if (IsKeyPressed(KEY_P)) {
+			pause = !pause;
+		}
 		if (!pause) {
 			Update();
 		}

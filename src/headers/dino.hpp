@@ -15,12 +15,6 @@
 
 #define maxDinos 4
 
-enum State {
-	JUMPING,
-	UP_RUNNING,
-	DOWN_RUNNING,
-	DEAD,
-};
 
 
 class Dino
@@ -30,10 +24,19 @@ class Dino
 		Dino();
 		~Dino();
 
+		enum State {
+			JUMPING,
+			FALLING,
+			UP_RUNNING,
+			DOWN_RUNNING,
+			DEAD,
+		};
+
 	private:
 
 		State state;
 		bool changedState;
+		bool onGround;
 		uint64_t score;
 		uint16_t colisionEntity;
 		uint8_t texture;

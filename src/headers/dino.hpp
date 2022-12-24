@@ -3,7 +3,9 @@
 
 #include <cstdint>
 #include <raylib.h>
+#include <iostream>
 #include <random>
+#include <unordered_map>
 
 #include "global.hpp"
 
@@ -42,6 +44,7 @@ class Dino
 		uint8_t texture;
 		Vector2 pos;
 
+		friend std::ostream& operator<<(std::ostream& os, const Dino& dino);
 		friend class IA;
 };
 

@@ -72,6 +72,7 @@ void IA::Update()
 			}
 			dino.score++;
 
+			std::cout << dino << '\n';
 			// TODO: colisions
 			// TODO: ia stuff
         }

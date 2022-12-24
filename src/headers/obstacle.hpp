@@ -2,9 +2,11 @@
 #define OBSTACLE_HPP
 
 #include <cstdint>
+#include <iostream>
 #include <raylib.h>
 #include <random>
 #include <vector>
+#include <unordered_map>
 #include "global.hpp"
 
 #define birdWidth 62
@@ -43,8 +45,10 @@ class Obstacle
 		inline static std::vector<Obstacle> obstacles;
 		inline static float time;
 
+		friend std::ostream& operator<<(std::ostream& os, const Obstacle& obs);
 		friend class IA;
 
 };
 
 #endif // !OBSTACLE_HPP
+	   //

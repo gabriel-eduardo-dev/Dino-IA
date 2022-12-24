@@ -22,10 +22,7 @@ void IA::Update()
 		if (dino.state != Dino::State::DEAD)
 		{
 			if (update_texture) {
-				dino.texture++;
-				if (dino.texture > 2) {
-					dino.texture = 1; // fixed btw 1 and 2, where he runs it
-				}
+				(++dino.texture > 2) ? dino.texture = 1 : dino.texture;	
 			}
 			if (IsKeyDown(KEY_S))
 			{

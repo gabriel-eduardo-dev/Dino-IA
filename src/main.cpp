@@ -3,6 +3,7 @@
 
 #include "headers/global.hpp"
 #include "headers/ia.hpp"
+#include "headers/obstacle.hpp"
 
 bool pause = false;
 float ground_x = 0;
@@ -49,9 +50,10 @@ static void Init()
 	bird = LoadTexture("assets/bird.png");
 	smallCactus = LoadTexture("assets/smallCactu.png");
 	bigCactus = LoadTexture("assets/bigCactus.png");
-	especialCactu = LoadTexture("assets/especialCactu.png");
+	especialCactu = LoadTexture("assets/specialCactu.png");
 	
 	IA::Init();
+	Obstacle::Init();
 }
 
 static void Update()
@@ -61,6 +63,7 @@ static void Update()
 		ground_x = 0.0f;
 	}
     IA::Update();
+	Obstacle::Update();
 }
 
 static void Draw()
@@ -74,8 +77,8 @@ static void Draw()
     // Ground
 	DrawTexturePro(ground, Rectangle{static_cast<float>(ground_x * map_velocity), 0, static_cast<float>(ground.width), static_cast<float>(ground.height)}, Rectangle{0, ground_pos_y - 15, screen_width, static_cast<float>(ground.height)}, Vector2{0}, 0, RAYWHITE);
 
+	Obstacle::Draw();
 	IA::Draw();
-
 	
 	EndDrawing();
 }

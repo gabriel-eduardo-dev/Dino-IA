@@ -7,7 +7,7 @@
 
 bool pause = false;
 float ground_x = 0;
-float map_velocity = 1.0f;
+float map_velocity = 6.0f;
 
 Texture2D ground;
 Texture2D upDino;
@@ -30,6 +30,10 @@ int32_t main (int argc, char *argv[])
 		if (IsKeyPressed(KEY_P)) {
 			pause = !pause;
 		}
+		if (IsKeyPressed(KEY_R)) {
+			IA::Init();
+			Obstacle::Init();
+		}
 		if (!pause) {
 			Update();
 		}
@@ -48,7 +52,7 @@ static void Init()
 	upDino = LoadTexture("assets/upDino.png");
 	downDino = LoadTexture("assets/downDino.png");
 	bird = LoadTexture("assets/bird.png");
-	smallCactus = LoadTexture("assets/smallCactu.png");
+	smallCactus = LoadTexture("assets/smallCactus.png");
 	bigCactus = LoadTexture("assets/bigCactus.png");
 	especialCactu = LoadTexture("assets/specialCactu.png");
 	
@@ -58,7 +62,8 @@ static void Init()
 
 static void Update()
 {
-	ground_x += 4.0f;
+	ground_x += map_velocity;
+	std::cout << GetTime() << std::endl;
 	if (ground_x > ground.width) {
 		ground_x = 0.0f;
 	}
@@ -70,12 +75,12 @@ static void Draw()
 {
     BeginDrawing();
 
-	ClearBackground(Color{29,29,29});
+	ClearBackground(WHITE);
 	DrawFPS(25, 25);
 	DrawText(TextFormat("%i %i", GetMouseX(), GetMouseY()), 25, 50, 20, LIME);
 
     // Ground
-	DrawTexturePro(ground, Rectangle{static_cast<float>(ground_x * map_velocity), 0, static_cast<float>(ground.width), static_cast<float>(ground.height)}, Rectangle{0, ground_pos_y - 15, screen_width, static_cast<float>(ground.height)}, Vector2{0}, 0, RAYWHITE);
+	DrawTexturePro(ground, Rectangle{static_cast<float>(ground_x + map_velocity), 0, static_cast<float>(ground.width), static_cast<float>(ground.height)}, Rectangle{0, ground_pos_y - 15, screen_width, static_cast<float>(ground.height)}, Vector2{0}, 0, RAYWHITE);
 
 	Obstacle::Draw();
 	IA::Draw();

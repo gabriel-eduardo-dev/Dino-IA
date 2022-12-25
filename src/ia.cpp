@@ -4,6 +4,7 @@
 
 void IA::Init() 
 {
+	dinos.clear();
 	for (size_t i = 0; i < TOTAL_DINOS; i++) {
 		dinos.push_back(Dino());
 	}
@@ -30,7 +31,7 @@ void IA::Update()
 				dino.changedState = true;
 				dino.pos.y += 0.5f;
 			}
-			else if (IsKeyPressed(KEY_W) && dino.onGround)
+			else if (IsKeyDown(KEY_W) && dino.onGround)
 			{
 				dino.state = Dino::State::JUMPING;
 				dino.changedState = false;
@@ -50,7 +51,7 @@ void IA::Update()
 			}
 
 			// jump limit is 3x dino height
-			if (dino.pos.y <= ground_pos_y - upDinoHeight * 3) {
+			if (dino.pos.y <= ground_pos_y - upDinoHeight * 3.3) {
 				dino.state = Dino::State::FALLING;
 			}
 		
@@ -72,7 +73,6 @@ void IA::Update()
 			}
 			dino.score++;
 
-			std::cout << dino << '\n';
 			// TODO: colisions
 			// TODO: ia stuff
         }
@@ -88,22 +88,18 @@ void IA::Draw()
 			case Dino::State::FALLING:
 			case Dino::State::JUMPING:
                 DrawTexturePro(upDino, Rectangle{0, 0, upDinoWidth, upDinoHeight}, Rectangle{dino.pos.x, dino.pos.y, upDinoWidth, upDinoHeight}, Vector2{0}, 0, RAYWHITE);
-		        DrawRectangleLines(dino.pos.x, dino.pos.y, upDinoWidth, upDinoHeight, RED);
 				break;
 
 			case Dino::State::UP_RUNNING:
                 DrawTexturePro(upDino, Rectangle{static_cast<float>(dino.texture * upDinoWidth), 0, upDinoWidth, upDinoHeight}, Rectangle{dino.pos.x, dino.pos.y, upDinoWidth, upDinoHeight}, Vector2{0}, 0, RAYWHITE);
-		        DrawRectangleLines(dino.pos.x, dino.pos.y, upDinoWidth, upDinoHeight, RED);
 				break;
 
 			case Dino::State::DOWN_RUNNING:
                 DrawTexturePro(downDino, Rectangle{static_cast<float>(dino.texture * downDinoWidth), 0, downDinoWidth, downDinoHeight}, Rectangle{dino.pos.x, dino.pos.y, downDinoWidth, downDinoHeight}, Vector2{0}, 0, RAYWHITE);
-		        DrawRectangleLines(dino.pos.x, dino.pos.y, downDinoWidth, downDinoHeight, RED);
 				break;
 
 			case Dino::State::DEAD:
 				DrawTexturePro(upDino, Rectangle{static_cast<float>(upDino.width - upDinoWidth), 0, upDinoWidth, upDinoHeight}, Rectangle{dino.pos.x, dino.pos.y, upDinoWidth, upDinoHeight}, Vector2{0}, 0, RAYWHITE);
-		        DrawRectangleLines(dino.pos.x, dino.pos.y, upDinoWidth, upDinoHeight, RED);
 				break;
 		}
 	}

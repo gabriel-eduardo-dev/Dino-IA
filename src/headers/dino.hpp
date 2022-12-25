@@ -17,8 +17,6 @@
 
 #define maxDinos 4
 
-
-
 class Dino
 {
 	public:

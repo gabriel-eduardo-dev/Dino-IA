@@ -21,13 +21,12 @@
 #define specialCactuWidth 67
 #define specialCactuHeight 67
 
-#define MAX_OBSTACLES 100
+#define MAX_OBSTACLES 10
 
 class Obstacle
 {
 	public:
 
-		Obstacle();
 
 		static void Init();
 		static void Update();
@@ -37,10 +36,11 @@ class Obstacle
 		
 	private:
 
+		Obstacle();
+
 		Type type;
 		Vector2 pos;
-		uint8_t texture;
-		bool is_outside_of_bounds;
+		int texture;
 
 		inline static std::vector<Obstacle> obstacles;
 		inline static float time;

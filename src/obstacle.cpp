@@ -18,6 +18,38 @@ std::ostream& operator<<(std::ostream& os, const Obstacle& obs)
 	return os;
 }
 
+Obstacle Obstacle::getFirstObstacle(const Dino& dino) 
+{
+	Obstacle result;
+	result.pos.x = 99999;
+	for (const Obstacle& obs : obstacles)
+	{
+		int32_t obs_width;
+		switch (obs.type) 
+		{
+			case BIRD:
+				obs_width = birdWidth;
+				break;
+
+			case SMALL_CACTU:
+				obs_width = smallCactuWidth * obs.texture;
+				break;
+
+			case BIG_CACTU:
+				obs_width = bigCactuWidth * obs.texture;
+				break;
+			case ESPECIAL_CACTU:
+				obs_width = specialCactuWidth;
+				break;
+		}
+		int32_t distance = (obs.pos.x + obs_width) - dino.pos.x ;
+		if (distance > 0 && distance < result.pos.x) {
+			result = obs;
+		}
+	}
+	return result;
+}
+
 Obstacle::Obstacle()
 {	
 	type = Obstacle::Type(GetRandomValue(0, 3));

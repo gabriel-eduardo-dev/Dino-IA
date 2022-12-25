@@ -44,6 +44,7 @@ class Dino
 
 		friend std::ostream& operator<<(std::ostream& os, const Dino& dino);
 		friend class IA;
+		friend class Obstacle;
 };
 
 #endif // !DINO_HPP

@@ -1,6 +1,8 @@
 #include "headers/ia.hpp"
 #include "headers/global.hpp"
+#include <cstdlib>
 #include <iostream>
+#include <system_error>
 
 void IA::Init() 
 {
@@ -18,6 +20,7 @@ void IA::Update()
 		time = 0.0f;
 		update_texture = true;
 	}
+	system("clear");
 	for (Dino& dino : dinos)
 	{
 		if (dino.state != Dino::State::DEAD)
@@ -72,6 +75,8 @@ void IA::Update()
 				dino.onGround = true;
 			}
 			dino.score++;
+	        std::cout << Obstacle::getFirstObstacle(dino) << std::endl;
+			std::cout << dino << std::endl;
 
 			// TODO: colisions
 			// TODO: ia stuff

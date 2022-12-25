@@ -7,6 +7,7 @@
 #include <raylib.h>
 
 #include "dino.hpp"
+#include "obstacle.hpp"
 
 class IA
 {

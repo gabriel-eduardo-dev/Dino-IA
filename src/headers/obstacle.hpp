@@ -8,6 +8,7 @@
 #include <vector>
 #include <unordered_map>
 #include "global.hpp"
+#include "dino.hpp"
 
 #define birdWidth 62
 #define birdHeight 50
@@ -31,6 +32,7 @@ class Obstacle
 		static void Init();
 		static void Update();
 		static void Draw();
+		static Obstacle getFirstObstacle(const Dino& dino);
 
 		enum Type {BIRD, SMALL_CACTU, BIG_CACTU, ESPECIAL_CACTU};
 		

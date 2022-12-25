@@ -75,7 +75,7 @@ static void Draw()
 {
     BeginDrawing();
 
-	ClearBackground(WHITE);
+	ClearBackground(Color{29,29,29});
 	DrawFPS(25, 25);
 	DrawText(TextFormat("%i %i", GetMouseX(), GetMouseY()), 25, 50, 20, LIME);
 

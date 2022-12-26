@@ -7,12 +7,13 @@
 #define screen_width 1280
 #define screen_height 720
 
-#define TOTAL_DINOS 2
+#define TOTAL_DINOS 100
+#define TOTAL_DINO_COLORS 7
 #define GRAVITY 5
 
 extern Texture2D ground;
-extern Texture2D upDino;
-extern Texture2D downDino;
+extern Texture2D upDino[TOTAL_DINO_COLORS];
+extern Texture2D downDino[TOTAL_DINO_COLORS];
 extern Texture2D bird;
 extern Texture2D smallCactus;
 extern Texture2D bigCactus;

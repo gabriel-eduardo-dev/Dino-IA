@@ -11,8 +11,8 @@ float map_velocity = 6.0f;
 float score = 0.0f;
 
 Texture2D ground;
-Texture2D upDino;
-Texture2D downDino;
+Texture2D upDino[TOTAL_DINO_COLORS];
+Texture2D downDino[TOTAL_DINO_COLORS];
 Texture2D bird;
 Texture2D smallCactus;
 Texture2D bigCactus;
@@ -49,9 +49,12 @@ static void Init()
 	InitWindow(screen_width, screen_height, "Dino IA");
 	SetTargetFPS(60);
 
+	for (size_t i = 0; i < TOTAL_DINO_COLORS; i++) {
+		upDino[i] = LoadTexture(("assets/upDino" + std::to_string(i) + ".png").c_str());
+		downDino[i] = LoadTexture(("assets/downDino" + std::to_string(i) + ".png").c_str());
+	}
+
 	ground = LoadTexture("assets/ground.png");
-	upDino = LoadTexture("assets/upDino.png");
-	downDino = LoadTexture("assets/downDino.png");
 	bird = LoadTexture("assets/bird.png");
 	smallCactus = LoadTexture("assets/smallCactus.png");
 	bigCactus = LoadTexture("assets/bigCactus.png");
@@ -95,9 +98,11 @@ static void Draw()
 static void EndInit()
 {
 	IA::EndInit();
+	for (size_t i = 0; i < TOTAL_DINO_COLORS; i++) {
+		UnloadTexture(upDino[i]);
+		UnloadTexture(downDino[i]);
+	}
 	UnloadTexture(ground);
-	UnloadTexture(upDino);
-	UnloadTexture(downDino);
 	UnloadTexture(bird);
 	UnloadTexture(smallCactus);
 	UnloadTexture(bigCactus);

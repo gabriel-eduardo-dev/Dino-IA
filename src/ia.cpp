@@ -74,12 +74,12 @@ void IA::Update()
 			Obstacle obs = Obstacle::getFirstObstacle(dino);
 
 			if (dino.state == Dino::State::DOWN_RUNNING) {
-				if (CheckCollisionRecs(Rectangle{dino.pos.x, dino.pos.y, downDinoWidth, downDinoHeight}, Rectangle{obs.pos.x, obs.pos.y, obs.width - 5, obs.height - 5})) {
+				if (CheckCollisionRecs(Rectangle{dino.pos.x, dino.pos.y, downDinoWidth, downDinoHeight}, Rectangle{obs.pos.x + 5, obs.pos.y + 5, obs.width - 5, obs.height - 5})) {
 					dino.state = Dino::State::DEAD;
 					++total_deads;
 				}
 			} else {
-				if (CheckCollisionRecs(Rectangle{dino.pos.x, dino.pos.y, upDinoWidth, upDinoHeight}, Rectangle{obs.pos.x, obs.pos.y, obs.width - 5, obs.height - 5})) {
+				if (CheckCollisionRecs(Rectangle{dino.pos.x, dino.pos.y, upDinoWidth, upDinoHeight}, Rectangle{obs.pos.x + 5, obs.pos.y + 5, obs.width - 5, obs.height - 5})) {
 					dino.state = Dino::State::DEAD;
 					++total_deads;
 				}
@@ -124,19 +124,19 @@ void IA::Draw()
 		{
 			case Dino::State::FALLING:
 			case Dino::State::JUMPING:
-                DrawTexturePro(upDino, Rectangle{0, 0, upDinoWidth, upDinoHeight}, Rectangle{dino.pos.x, dino.pos.y, upDinoWidth, upDinoHeight}, Vector2{0}, 0, RAYWHITE);
+                DrawTexturePro(upDino[dino.color], Rectangle{0, 0, upDinoWidth, upDinoHeight}, Rectangle{dino.pos.x, dino.pos.y, upDinoWidth, upDinoHeight}, Vector2{0}, 0, RAYWHITE);
 				break;
 
 			case Dino::State::UP_RUNNING:
-                DrawTexturePro(upDino, Rectangle{static_cast<float>(dino.texture * upDinoWidth), 0, upDinoWidth, upDinoHeight}, Rectangle{dino.pos.x, dino.pos.y, upDinoWidth, upDinoHeight}, Vector2{0}, 0, RAYWHITE);
+                DrawTexturePro(upDino[dino.color], Rectangle{static_cast<float>(dino.texture * upDinoWidth), 0, upDinoWidth, upDinoHeight}, Rectangle{dino.pos.x, dino.pos.y, upDinoWidth, upDinoHeight}, Vector2{0}, 0, RAYWHITE);
 				break;
 
 			case Dino::State::DOWN_RUNNING:
-                DrawTexturePro(downDino, Rectangle{static_cast<float>(dino.texture * downDinoWidth), 0, downDinoWidth, downDinoHeight}, Rectangle{dino.pos.x, dino.pos.y, downDinoWidth, downDinoHeight}, Vector2{0}, 0, RAYWHITE);
+                DrawTexturePro(downDino[dino.color], Rectangle{static_cast<float>(dino.texture * downDinoWidth), 0, downDinoWidth, downDinoHeight}, Rectangle{dino.pos.x, dino.pos.y, downDinoWidth, downDinoHeight}, Vector2{0}, 0, RAYWHITE);
 				break;
 
 			case Dino::State::DEAD:
-				DrawTexturePro(upDino, Rectangle{static_cast<float>(upDino.width - upDinoWidth), 0, upDinoWidth, upDinoHeight}, Rectangle{dino.pos.x, dino.pos.y, upDinoWidth, upDinoHeight}, Vector2{0}, 0, RAYWHITE);
+				DrawTexturePro(upDino[dino.color], Rectangle{static_cast<float>(upDino[0].width - upDinoWidth), 0, upDinoWidth, upDinoHeight}, Rectangle{dino.pos.x, dino.pos.y, upDinoWidth, upDinoHeight}, Vector2{0}, 0, RAYWHITE);
 				break;
 		}
 	}

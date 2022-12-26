@@ -37,6 +37,7 @@ Dino::Dino()
 	onGround = true;
 	colisionEntity = 0;
 	score = 0;
+	color = GetRandomValue(0, TOTAL_DINO_COLORS);
 }
 
 Dino::~Dino()

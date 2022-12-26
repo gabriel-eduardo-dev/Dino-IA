@@ -40,6 +40,7 @@ class Dino
 		uint64_t score;
 		uint16_t colisionEntity;
 		uint8_t texture;
+		int32_t color;
 		Vector2 pos;
 
 		friend std::ostream& operator<<(std::ostream& os, const Dino& dino);

@@ -24,7 +24,7 @@ endif()
 
 # Our Project
 
-add_executable(${PROJECT_NAME} src/main.cpp src/IA.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/ia.cpp src/obstacle.cpp src/dino.cpp)
 #set(raylib_VERBOSE 1)
 target_link_libraries(${PROJECT_NAME} raylib)
 set(EXECUTABLE_OUTPUT_PATH "../bin")

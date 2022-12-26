@@ -42,7 +42,9 @@ class Obstacle
 
 		Type type;
 		Vector2 pos;
-		int texture;
+		int32_t texture;
+		float width;
+		float height;
 
 		inline static std::vector<Obstacle> obstacles;
 		inline static float time;

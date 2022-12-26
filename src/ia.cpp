@@ -1,8 +1,4 @@
 #include "headers/ia.hpp"
-#include "headers/global.hpp"
-#include <cstdlib>
-#include <iostream>
-#include <system_error>
 
 void IA::Init() 
 {
@@ -20,7 +16,6 @@ void IA::Update()
 		time = 0.0f;
 		update_texture = true;
 	}
-	system("clear");
 	for (Dino& dino : dinos)
 	{
 		if (dino.state != Dino::State::DEAD)
@@ -75,12 +70,49 @@ void IA::Update()
 				dino.onGround = true;
 			}
 			dino.score++;
-	        std::cout << Obstacle::getFirstObstacle(dino) << std::endl;
-			std::cout << dino << std::endl;
 
-			// TODO: colisions
+			Obstacle obs = Obstacle::getFirstObstacle(dino);
+
+			if (dino.state == Dino::State::DOWN_RUNNING) {
+				if (CheckCollisionRecs(Rectangle{dino.pos.x, dino.pos.y, downDinoWidth, downDinoHeight}, Rectangle{obs.pos.x, obs.pos.y, obs.width - 5, obs.height - 5})) {
+					dino.state = Dino::State::DEAD;
+					++total_deads;
+				}
+			} else {
+				if (CheckCollisionRecs(Rectangle{dino.pos.x, dino.pos.y, upDinoWidth, upDinoHeight}, Rectangle{obs.pos.x, obs.pos.y, obs.width - 5, obs.height - 5})) {
+					dino.state = Dino::State::DEAD;
+					++total_deads;
+				}
+			}
 			// TODO: ia stuff
         }
+		else if (dino.pos.x + upDinoWidth > 0) {
+			// GRAVITY 
+			if (dino.state == Dino::State::JUMPING) {
+				dino.pos.y -= GRAVITY;
+			} 
+			else {
+				dino.pos.y += GRAVITY + 0.5f;
+			}
+			// Fix dino if on ground
+			if (dino.state == Dino::State::DOWN_RUNNING && dino.pos.y + downDinoHeight >= ground_pos_y)
+			{
+                dino.pos.y = ground_pos_y - downDinoHeight;
+				dino.onGround = true;
+			}
+			else if (dino.pos.y + upDinoHeight >= ground_pos_y)
+			{
+                dino.pos.y = ground_pos_y - upDinoHeight;
+				dino.onGround = true;
+			}
+			dino.pos.x -= map_velocity;
+		}
+		if (total_deads == TOTAL_DINOS) {
+			total_deads = 0;
+			Obstacle::Init();
+			IA::Init();
+			map_velocity = 6.0f;
+		}
 	}
 }
 

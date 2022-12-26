@@ -25,6 +25,7 @@ class IA
 
 		inline static std::vector<Dino> dinos;
 		inline static float time;
+		inline static size_t total_deads;
 };
 
 #endif // !IA_HPP

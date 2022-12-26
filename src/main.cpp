@@ -8,6 +8,7 @@
 bool pause = false;
 float ground_x = 0;
 float map_velocity = 6.0f;
+float score = 0.0f;
 
 Texture2D ground;
 Texture2D upDino;
@@ -62,8 +63,10 @@ static void Init()
 
 static void Update()
 {
+	if (map_velocity < 10.0f) {
+		map_velocity += 0.0002;
+	}
 	ground_x += map_velocity;
-	std::cout << GetTime() << std::endl;
 	if (ground_x > ground.width) {
 		ground_x = 0.0f;
 	}
@@ -75,9 +78,10 @@ static void Draw()
 {
     BeginDrawing();
 
-	ClearBackground(Color{29,29,29});
+	ClearBackground(WHITE);
 	DrawFPS(25, 25);
 	DrawText(TextFormat("%i %i", GetMouseX(), GetMouseY()), 25, 50, 20, LIME);
+	DrawText(TextFormat("Map vel: %f", map_velocity), screen_width - 200, 25, 20, LIME);
 
     // Ground
 	DrawTexturePro(ground, Rectangle{static_cast<float>(ground_x + map_velocity), 0, static_cast<float>(ground.width), static_cast<float>(ground.height)}, Rectangle{0, ground_pos_y - 15, screen_width, static_cast<float>(ground.height)}, Vector2{0}, 0, RAYWHITE);

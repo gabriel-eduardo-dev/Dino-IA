@@ -24,25 +24,7 @@ Obstacle Obstacle::getFirstObstacle(const Dino& dino)
 	result.pos.x = 99999;
 	for (const Obstacle& obs : obstacles)
 	{
-		int32_t obs_width;
-		switch (obs.type) 
-		{
-			case BIRD:
-				obs_width = birdWidth;
-				break;
-
-			case SMALL_CACTU:
-				obs_width = smallCactuWidth * obs.texture;
-				break;
-
-			case BIG_CACTU:
-				obs_width = bigCactuWidth * obs.texture;
-				break;
-			case ESPECIAL_CACTU:
-				obs_width = specialCactuWidth;
-				break;
-		}
-		int32_t distance = (obs.pos.x + obs_width) - dino.pos.x ;
+		int32_t distance = (obs.pos.x + obs.width) - dino.pos.x ;
 		if (distance > 0 && distance < result.pos.x) {
 			result = obs;
 		}
@@ -58,21 +40,29 @@ Obstacle::Obstacle()
 		case BIRD:
 			texture = 1;
 			pos.y = ground_pos_y - birdHeight * GetRandomValue(1, 3);
+			width = birdWidth;
+			height = birdHeight;
 			break;
 
 		case SMALL_CACTU:
 			texture = GetRandomValue(1, 5);
 			pos.y = ground_pos_y - smallCactuHeight;
+			width = smallCactuWidth * texture;
+			height = smallCactuHeight;
 			break;
 
 		case BIG_CACTU:
 			texture = GetRandomValue(1, 3);
 			pos.y = ground_pos_y - bigCactuHeight;
+			width = bigCactuWidth * texture;
+			height = bigCactuHeight;
 			break;
 
 		case ESPECIAL_CACTU:
 			texture = 1;
 			pos.y = ground_pos_y - specialCactuHeight;
+			width = specialCactuWidth;
+			height = specialCactuHeight;
 			break;
 	}
 }
@@ -84,7 +74,7 @@ void Obstacle::Init()
 	{
     	obstacles.push_back(Obstacle());
 		(i == 0) ? obstacles[i].pos.x = screen_width 
-				 : obstacles[i].pos.x = obstacles[i-1].pos.x + 200 + GetRandomValue(100, 250);
+				 : obstacles[i].pos.x = obstacles[i-1].pos.x + 300 + GetRandomValue(50, 250);
     }
 }
 
@@ -108,8 +98,8 @@ void Obstacle::Update()
 		{
 			obs = Obstacle();
 			(index == 0) // change pos.x to last obstacle pos.x + gap
-				? obs.pos.x = obstacles[obstacles.size() - 1].pos.x + 200 + GetRandomValue(100, 250)
-	            : obs.pos.x = obstacles[index-1].pos.x + 200 + GetRandomValue(100, 250);
+				? obs.pos.x = obstacles[obstacles.size() - 1].pos.x + 300 + GetRandomValue(100, 250)
+	            : obs.pos.x = obstacles[index-1].pos.x + 300 + GetRandomValue(100, 250);
 		}
 		(++index == MAX_OBSTACLES) ? index = 0 : index;
 	} 

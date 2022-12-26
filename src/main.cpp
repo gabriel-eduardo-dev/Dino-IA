@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <cstdlib>
 #include <raylib.h>
 
 #include "headers/global.hpp"
@@ -7,6 +8,7 @@
 
 bool pause = false;
 float ground_x = 0;
+float background_x = 0;
 float map_velocity = 6.0f;
 float score = 0.0f;
 
@@ -17,6 +19,7 @@ Texture2D bird;
 Texture2D smallCactus;
 Texture2D bigCactus;
 Texture2D especialCactu;
+Texture2D background;
 
 static void Init();
 static void Update();
@@ -59,6 +62,7 @@ static void Init()
 	smallCactus = LoadTexture("assets/smallCactus.png");
 	bigCactus = LoadTexture("assets/bigCactus.png");
 	especialCactu = LoadTexture("assets/specialCactu.png");
+	background = LoadTexture("assets/background_sky.png");
 	
 	IA::Init();
 	Obstacle::Init();
@@ -70,8 +74,12 @@ static void Update()
 		map_velocity += 0.0002;
 	}
 	ground_x += map_velocity;
+	background_x += map_velocity / 2.0f;
 	if (ground_x > ground.width) {
 		ground_x = 0.0f;
+	}
+	if (background_x > background.width) {
+		background_x = 0.0f;
 	}
     IA::Update();
 	Obstacle::Update();
@@ -81,13 +89,14 @@ static void Draw()
 {
     BeginDrawing();
 
-	ClearBackground(WHITE);
+	ClearBackground(Color{32,32,32});
 	DrawFPS(25, 25);
+	DrawTexturePro(background, Rectangle{background_x, 0, (float)background.width, (float)background.height}, Rectangle{0, -250, (float)background.width, (float)background.height}, Vector2{0}, 0, RAYWHITE);
 	DrawText(TextFormat("%i %i", GetMouseX(), GetMouseY()), 25, 50, 20, LIME);
 	DrawText(TextFormat("Map vel: %f", map_velocity), screen_width - 200, 25, 20, LIME);
 
     // Ground
-	DrawTexturePro(ground, Rectangle{static_cast<float>(ground_x + map_velocity), 0, static_cast<float>(ground.width), static_cast<float>(ground.height)}, Rectangle{0, ground_pos_y - 15, screen_width, static_cast<float>(ground.height)}, Vector2{0}, 0, RAYWHITE);
+	DrawTexturePro(ground, Rectangle{ground_x, 0, static_cast<float>(ground.width), static_cast<float>(ground.height)}, Rectangle{0, ground_pos_y - 15, screen_width, static_cast<float>(ground.height)}, Vector2{0}, 0, RAYWHITE);
 
 	Obstacle::Draw();
 	IA::Draw();
@@ -107,5 +116,6 @@ static void EndInit()
 	UnloadTexture(smallCactus);
 	UnloadTexture(bigCactus);
 	UnloadTexture(especialCactu);
+	UnloadTexture(background);
     CloseWindow(); 
 }

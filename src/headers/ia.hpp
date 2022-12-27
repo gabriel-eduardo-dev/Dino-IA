@@ -1,7 +1,6 @@
 #ifndef IA_HPP
 #define IA_HPP
 
-#include <array>
 #include <cstdint>
 #include <vector>
 #include <algorithm>
@@ -11,9 +10,45 @@
 #include "dino.hpp"
 #include "obstacle.hpp"
 
-#define BIAS 4
+class Neuron
+{
+	private:
 
-class IA
+		std::vector<double> weights;
+		double bias;
+
+	public:
+
+		Neuron(int32_t num_inputs);
+		double feedforward(const std::vector<double>& inputs);
+};
+
+class Layer 
+{
+	private:
+
+		std::vector<Neuron> neurons;
+
+	public:
+
+        Layer(int32_t num_neurons, int32_t num_inputs_per_neuron);
+        std::vector<double> feedforward(const std::vector<double>& inputs);
+};
+
+class NeuralNetWork
+{
+	private:
+
+		std::vector<Layer> layers;
+		Dino dino;
+
+	public:
+
+		NeuralNetWork(const std::vector<int32_t>& topology);
+		std::vector<double> feedforward(const std::vector<double>& inputs);
+};
+
+class IA 
 {
 	public:
 
@@ -21,28 +56,9 @@ class IA
 		static void Update();
 		static void Draw();
 
-		template <size_t W, size_t R>
-		struct Layer {
-			std::array<double, W> weights;
-			std::array<double, R> results;
-		};
-		struct Layers {
-			Layer<6,6> input;
-			Layer<6,2> hidden;
-			Layer<0,2> output;
-		};
-
-		void rna_init();
-		void rna_update();
-	
 	private:
 
-		Layers layers;
-		Dino dino;
-	
-		inline static std::vector<IA> RNAS;
-
-		friend std::ostream& operator<<(std::ostream& os, const IA& ia);
+		std::vector<NeuralNetWork> neuralNetwtoks;
 };
 
 #endif // !IA_HPP

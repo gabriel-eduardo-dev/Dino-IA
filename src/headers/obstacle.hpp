@@ -8,7 +8,7 @@
 #include <vector>
 #include <unordered_map>
 #include "global.hpp"
-#include "dino.hpp"
+#include <tuple>
 
 #define birdWidth 62
 #define birdHeight 50
@@ -28,11 +28,11 @@ class Obstacle
 {
 	public:
 
-
 		static void Init();
 		static void Update();
 		static void Draw();
-		static Obstacle getFirstObstacle(const Dino& dino);
+
+		inline static std::vector<Obstacle> obstacles;
 
 		enum Type {BIRD, SMALL_CACTU, BIG_CACTU, ESPECIAL_CACTU};
 		
@@ -46,13 +46,13 @@ class Obstacle
 		float width;
 		float height;
 
-		inline static std::vector<Obstacle> obstacles;
 		inline static float time;
 
 		friend std::ostream& operator<<(std::ostream& os, const Obstacle& obs);
-		friend class IA;
-
+		friend std::tuple<Obstacle, float> getNearestObstacle(int32_t dino_pos_x);
+		friend class Dino;
 };
 
+std::tuple<Obstacle, float> getNearestObstacle(int32_t dino_pos_x);
+
 #endif // !OBSTACLE_HPP
-	   //

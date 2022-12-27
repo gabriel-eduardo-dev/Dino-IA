@@ -18,18 +18,20 @@ std::ostream& operator<<(std::ostream& os, const Obstacle& obs)
 	return os;
 }
 
-Obstacle Obstacle::getFirstObstacle(const Dino& dino) 
+std::tuple<Obstacle, float> getNearestObstacle(int32_t dino_pos_x) 
 {
-	Obstacle result;
-	result.pos.x = 99999;
-	for (const Obstacle& obs : obstacles)
+	Obstacle nearest_obstacle;
+	nearest_obstacle.pos.x = 99999;
+	float distance = 0.0f;
+	for (const auto& obs : Obstacle::obstacles)
 	{
-		int32_t distance = (obs.pos.x + obs.width) - dino.pos.x ;
-		if (distance > 0 && distance < result.pos.x) {
-			result = obs;
+		float distance_obs = (obs.pos.x + obs.width) - dino_pos_x ;
+		if (distance_obs > 0 && distance_obs < nearest_obstacle.pos.x) {
+			nearest_obstacle = obs;
+			distance = distance_obs;
 		}
 	}
-	return result;
+	return std::make_tuple(nearest_obstacle, distance);
 }
 
 Obstacle::Obstacle()
@@ -112,19 +114,27 @@ void Obstacle::Draw()
 		switch (obs.type)
 		{
 			case BIRD:
-				DrawTexturePro(bird, Rectangle{static_cast<float>(obs.texture * birdWidth), 0, birdWidth, birdHeight}, Rectangle{obs.pos.x, obs.pos.y, birdWidth, birdHeight}, Vector2{0}, 0, RAYWHITE);
+				DrawTexturePro(bird, 
+					{static_cast<float>(obs.texture * birdWidth), 0, birdWidth, birdHeight},
+					{obs.pos.x, obs.pos.y, birdWidth, birdHeight}, {0}, 0, RAYWHITE);
 				break;
 
 			case SMALL_CACTU:
-				DrawTexturePro(smallCactus, Rectangle{0, 0, static_cast<float>(obs.texture * smallCactuWidth), smallCactuHeight}, Rectangle{obs.pos.x, obs.pos.y, static_cast<float>(obs.texture * smallCactuWidth), smallCactuHeight}, Vector2{0}, 0, RAYWHITE);
+				DrawTexturePro(smallCactus, 
+					{0, 0, static_cast<float>(obs.texture * smallCactuWidth), smallCactuHeight},
+					{obs.pos.x, obs.pos.y, static_cast<float>(obs.texture * smallCactuWidth), smallCactuHeight}, {0}, 0, RAYWHITE);
 				break;
 
 			case BIG_CACTU:
-				DrawTexturePro(bigCactus, Rectangle{0, 0, static_cast<float>(obs.texture * bigCactuWidth), bigCactuHeight}, Rectangle{obs.pos.x, obs.pos.y, static_cast<float>(obs.texture * bigCactuWidth), bigCactuHeight}, Vector2{0}, 0, RAYWHITE);
+				DrawTexturePro(bigCactus, 
+					{0, 0, static_cast<float>(obs.texture * bigCactuWidth), bigCactuHeight},
+					{obs.pos.x, obs.pos.y, static_cast<float>(obs.texture * bigCactuWidth), bigCactuHeight}, Vector2{0}, 0, RAYWHITE);
 				break;
 
 			case ESPECIAL_CACTU:
-				DrawTexturePro(especialCactu, Rectangle{0, 0, specialCactuWidth, specialCactuHeight}, Rectangle{obs.pos.x, obs.pos.y, specialCactuWidth, specialCactuHeight}, Vector2{0}, 0, RAYWHITE);
+				DrawTexturePro(especialCactu, 
+					{0, 0, specialCactuWidth, specialCactuHeight},
+					{obs.pos.x, obs.pos.y, specialCactuWidth, specialCactuHeight}, {0}, 0, RAYWHITE);
 				break;
 		}	
 	}

@@ -5,7 +5,7 @@
 #include <vector>
 
 #include <raylib.h>
-
+#include "global.hpp"
 #include "dino.hpp"
 #include "obstacle.hpp"
 
@@ -16,16 +16,22 @@ class IA
 		static void Init();
 		static void Update();
 		static void Draw();
-		static void EndInit();
+
+		struct Weights {
+			float dino_y;
+			float obstacle_distance;
+			float obstacle_width;
+			float obstacle_height;
+			float obstacle_y;
+			float map_vel;
+		};
 		
 	private:
 
-		static void dinoUpdate();
-		static void dinoDraw();
+		Weights weights;
+		Dino dino;
 
-		inline static std::vector<Dino> dinos;
-		inline static float time;
-		inline static size_t total_deads;
+		inline static std::vector<IA> RNAS;
 };
 
 #endif // !IA_HPP

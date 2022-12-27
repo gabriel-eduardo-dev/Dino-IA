@@ -1,16 +1,24 @@
 #include <cstdint>
 #include <cstdlib>
+#include <string>
 #include <raylib.h>
 
 #include "headers/global.hpp"
-#include "headers/ia.hpp"
+#include "headers/dino.hpp"
 #include "headers/obstacle.hpp"
+#include "headers/ia.hpp"
 
 bool pause = false;
 float ground_x = 0;
 float background_x = 0;
 float map_velocity = 6.0f;
 float score = 0.0f;
+float MAX_RANGE = 1000.0f;
+float GENERATION = 1.0f;
+bool update_texture = false; // dino
+int32_t TOTAL_DEADS = 0;
+
+float frame_rate = 60.0f;
 
 Texture2D ground;
 Texture2D upDino[TOTAL_DINO_COLORS];
@@ -37,6 +45,8 @@ int32_t main (int argc, char *argv[])
 		if (IsKeyPressed(KEY_R)) {
 			IA::Init();
 			Obstacle::Init();
+			GENERATION += 1;
+			map_velocity = DEFAULT_MAP_VEL;
 		}
 		if (!pause) {
 			Update();
@@ -70,8 +80,17 @@ static void Init()
 
 static void Update()
 {
+	if (IsKeyDown(KEY_RIGHT) && frame_rate < 500) {
+		frame_rate += 10;
+		SetTargetFPS(frame_rate);
+	}
+	if (IsKeyDown(KEY_LEFT) && frame_rate > 60) {
+		frame_rate -= 10;
+		SetTargetFPS(frame_rate);
+	}
+
 	if (map_velocity < 10.0f) {
-		map_velocity += 0.0002;
+		map_velocity += 0.001;
 	}
 	ground_x += map_velocity;
 	background_x += map_velocity / 2.0f;
@@ -80,6 +99,13 @@ static void Update()
 	}
 	if (background_x > background.width) {
 		background_x = 0.0f;
+	}
+
+	update_texture = false;
+	static float time; time += GetFrameTime();
+	if (time >= 0.2f) {
+		time = 0;
+		update_texture = true;
 	}
     IA::Update();
 	Obstacle::Update();
@@ -92,21 +118,20 @@ static void Draw()
 	ClearBackground(Color{32,32,32});
 	DrawFPS(25, 25);
 	DrawTexturePro(background, Rectangle{background_x, 0, (float)background.width, (float)background.height}, Rectangle{0, -250, (float)background.width, (float)background.height}, Vector2{0}, 0, RAYWHITE);
-	DrawText(TextFormat("%i %i", GetMouseX(), GetMouseY()), 25, 50, 20, LIME);
-	DrawText(TextFormat("Map vel: %f", map_velocity), screen_width - 200, 25, 20, LIME);
+	DrawText(TextFormat("Map vel: %0.2f", map_velocity), screen_width - 200, 25, 20, LIME);
+	DrawText(TextFormat("Generation: %0.0f", GENERATION), screen_width - 200, 75, 20, LIME);
 
     // Ground
 	DrawTexturePro(ground, Rectangle{ground_x, 0, static_cast<float>(ground.width), static_cast<float>(ground.height)}, Rectangle{0, ground_pos_y - 15, screen_width, static_cast<float>(ground.height)}, Vector2{0}, 0, RAYWHITE);
 
-	Obstacle::Draw();
 	IA::Draw();
+	Obstacle::Draw();
 	
 	EndDrawing();
 }
 
 static void EndInit()
 {
-	IA::EndInit();
 	for (size_t i = 0; i < TOTAL_DINO_COLORS; i++) {
 		UnloadTexture(upDino[i]);
 		UnloadTexture(downDino[i]);

@@ -4,10 +4,10 @@
 #include <cstdint>
 #include <raylib.h>
 #include <iostream>
-#include <random>
 #include <unordered_map>
 
 #include "global.hpp"
+#include "obstacle.hpp"
 
 #define upDinoWidth 59
 #define upDinoHeight 62
@@ -15,7 +15,7 @@
 #define downDinoWidth 79
 #define downDinoHeight 39
 
-#define maxDinos 4
+extern bool update_texture;
 
 class Dino
 {
@@ -31,6 +31,9 @@ class Dino
 			DOWN_RUNNING,
 			DEAD,
 		};
+	
+		void update();
+		void draw();
 
 	private:
 
@@ -38,14 +41,12 @@ class Dino
 		bool changedState;
 		bool onGround;
 		uint64_t score;
-		uint16_t colisionEntity;
 		uint8_t texture;
 		int32_t color;
 		Vector2 pos;
 
-		friend std::ostream& operator<<(std::ostream& os, const Dino& dino);
 		friend class IA;
-		friend class Obstacle;
+		friend std::ostream& operator<<(std::ostream& os, const Dino& dino);
 };
 
 #endif // !DINO_HPP

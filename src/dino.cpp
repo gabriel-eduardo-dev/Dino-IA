@@ -13,12 +13,12 @@ const std::unordered_map<uint8_t, const std::string> map_states
 std::ostream& operator<<(std::ostream& os, const Dino& dino)
 {
 	os << "Dino {"
-		"\n\tState: " << map_states.at(dino.state) <<
-		"\n\tPos x: " << dino.pos.x <<
-		"\n\tPos y: " << dino.pos.y <<
-		"\n\tScore: " << dino.score <<
-		"\n\tOn Ground:" << dino.onGround <<
-	"\n}\n";
+		"\n\t\tState: " << map_states.at(dino.state) <<
+		"\n\t\tPos x: " << dino.pos.x <<
+		"\n\t\tPos y: " << dino.pos.y <<
+		"\n\t\tScore: " << dino.score <<
+		"\n\t\tOn Ground:" << dino.onGround <<
+	"\n\t}\n";
 	return os;
 }
 
@@ -32,6 +32,16 @@ Dino::Dino()
 	onGround = true;
 	score = 0;
 	color = GetRandomValue(0, TOTAL_DINO_COLORS);
+}
+
+void Dino::setState(State state)
+{
+	this->state = state;
+}
+
+Dino::State Dino::getState()
+{
+	return this->state;
 }
 
 void Dino::update()

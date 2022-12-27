@@ -10,7 +10,6 @@
 #define TOTAL_DINOS 10
 #define TOTAL_DINO_COLORS 7
 #define GRAVITY 5
-#define BIAS 4;
 #define DEFAULT_MAP_VEL 6.0;
 
 extern Texture2D ground;

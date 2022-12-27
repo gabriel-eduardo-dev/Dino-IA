@@ -35,6 +35,9 @@ class Dino
 		void update();
 		void draw();
 
+		void setState(State state);
+		Dino::State getState();
+
 	private:
 
 		State state;

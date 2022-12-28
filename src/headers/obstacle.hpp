@@ -51,6 +51,7 @@ class Obstacle
 		friend std::ostream& operator<<(std::ostream& os, const Obstacle& obs);
 		friend std::tuple<Obstacle, float> getNearestObstacle(int32_t dino_pos_x);
 		friend class Dino;
+		friend class IA;
 };
 
 std::tuple<Obstacle, float> getNearestObstacle(int32_t dino_pos_x);

@@ -35,7 +35,7 @@ class Dino
 		void update();
 		void draw();
 
-		void setState(State state);
+		void setState(State newState);
 		Dino::State getState();
 
 	private:
@@ -43,10 +43,13 @@ class Dino
 		State state;
 		bool changedState;
 		bool onGround;
-		uint64_t score;
 		uint8_t texture;
 		int32_t color;
 		Vector2 pos;
+
+		int32_t obstacles_passed;
+		Obstacle nearestObstacle;
+		float obstacleDistance;
 
 		friend class IA;
 		friend std::ostream& operator<<(std::ostream& os, const Dino& dino);

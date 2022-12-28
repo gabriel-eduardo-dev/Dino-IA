@@ -43,10 +43,11 @@ int32_t main (int argc, char *argv[])
 			pause = !pause;
 		}
 		if (IsKeyPressed(KEY_R)) {
+			GENERATION = 1;
+			map_velocity = DEFAULT_MAP_VEL;
+			TOTAL_DEADS = 0;
 			IA::Init();
 			Obstacle::Init();
-			GENERATION += 1;
-			map_velocity = DEFAULT_MAP_VEL;
 		}
 		if (!pause) {
 			Update();
@@ -89,7 +90,7 @@ static void Update()
 		SetTargetFPS(frame_rate);
 	}
 
-	if (map_velocity < 10.0f) {
+	if (map_velocity < 20.0f) {
 		map_velocity += 0.001;
 	}
 	ground_x += map_velocity;
@@ -119,7 +120,8 @@ static void Draw()
 	DrawFPS(25, 25);
 	DrawTexturePro(background, Rectangle{background_x, 0, (float)background.width, (float)background.height}, Rectangle{0, -250, (float)background.width, (float)background.height}, Vector2{0}, 0, RAYWHITE);
 	DrawText(TextFormat("Map vel: %0.2f", map_velocity), screen_width - 200, 25, 20, LIME);
-	DrawText(TextFormat("Generation: %0.0f", GENERATION), screen_width - 200, 75, 20, LIME);
+	DrawText(TextFormat("Generation: %0.0f", GENERATION), screen_width - 200, 50, 20, LIME);
+	DrawText(TextFormat("Dead dinos: %i", TOTAL_DEADS), screen_width - 200, 75, 20, LIME);
 
     // Ground
 	DrawTexturePro(ground, Rectangle{ground_x, 0, static_cast<float>(ground.width), static_cast<float>(ground.height)}, Rectangle{0, ground_pos_y - 15, screen_width, static_cast<float>(ground.height)}, Vector2{0}, 0, RAYWHITE);

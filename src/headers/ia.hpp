@@ -19,8 +19,10 @@ class Neuron
 
 	public:
 
-		Neuron(int32_t num_inputs);
+		Neuron(size_t num_inputs);
 		double feedforward(const std::vector<double>& inputs);
+		void mutate();
+		friend class IA;
 };
 
 class Layer 
@@ -31,8 +33,10 @@ class Layer
 
 	public:
 
-        Layer(int32_t num_neurons, int32_t num_inputs_per_neuron);
+        Layer(size_t num_neurons, size_t num_inputs_per_neuron);
         std::vector<double> feedforward(const std::vector<double>& inputs);
+		void mutate();
+		friend class IA;
 };
 
 class NeuralNetWork
@@ -40,12 +44,21 @@ class NeuralNetWork
 	private:
 
 		std::vector<Layer> layers;
-		Dino dino;
 
 	public:
 
 		NeuralNetWork(const std::vector<int32_t>& topology);
 		std::vector<double> feedforward(const std::vector<double>& inputs);
+		void mutate();
+		friend class IA;
+};
+
+struct Candidate
+{
+	Candidate(std::vector<int32_t> topology);
+	NeuralNetWork rna;
+	Dino dino;
+	double fitness;
 };
 
 class IA 
@@ -58,7 +71,7 @@ class IA
 
 	private:
 
-		std::vector<NeuralNetWork> neuralNetwtoks;
+		inline static std::vector<Candidate> population;
 };
 
 #endif // !IA_HPP

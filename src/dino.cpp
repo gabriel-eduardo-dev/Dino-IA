@@ -16,7 +16,6 @@ std::ostream& operator<<(std::ostream& os, const Dino& dino)
 		"\n\t\tState: " << map_states.at(dino.state) <<
 		"\n\t\tPos x: " << dino.pos.x <<
 		"\n\t\tPos y: " << dino.pos.y <<
-		"\n\t\tScore: " << dino.score <<
 		"\n\t\tOn Ground:" << dino.onGround <<
 	"\n\t}\n";
 	return os;
@@ -30,13 +29,14 @@ Dino::Dino()
 	state = State::UP_RUNNING;
 	changedState = false;
 	onGround = true;
-	score = 0;
 	color = GetRandomValue(0, TOTAL_DINO_COLORS);
 }
 
-void Dino::setState(State state)
+void Dino::setState(State newState)
 {
-	this->state = state;
+	if (this->state != Dino::State::DEAD) {
+		this->state = newState;
+	} 
 }
 
 Dino::State Dino::getState()
@@ -50,7 +50,11 @@ void Dino::update()
 	{
 		(update_texture && ++texture > 2) ? texture = 1 : texture;	
 
-		const auto [obstacle, distance] = getNearestObstacle(pos.x);
+		const auto [newObstacle, obstacleDistance] = getNearestObstacle(pos.x);
+		if (newObstacle.pos.x != nearestObstacle.pos.x) {
+			nearestObstacle = newObstacle;
+			obstacles_passed += 1;
+		}
 
 		// GRAVITY 
 		if (state == Dino::State::JUMPING) {
@@ -84,6 +88,7 @@ void Dino::update()
 		}
 		else if (pos.y + upDinoHeight >= ground_pos_y)
 		{
+			state = State::UP_RUNNING;
 			pos.y = ground_pos_y - upDinoHeight;
 			onGround = true;
 		}
@@ -93,12 +98,11 @@ void Dino::update()
 				Rectangle{pos.x, pos.y, 
 					static_cast<float>((state == Dino::State::DOWN_RUNNING) ? downDinoWidth : upDinoWidth), 
 					static_cast<float>((state == Dino::State::DOWN_RUNNING) ? downDinoHeight : upDinoHeight)}, 
-				Rectangle{obstacle.pos.x + 5, obstacle.pos.y + 5, obstacle.width - 5, obstacle.height - 5}))
+				Rectangle{nearestObstacle.pos.x + 5, nearestObstacle.pos.y + 5, nearestObstacle.width - 5, nearestObstacle.height - 5}))
 		{
 			state = Dino::State::DEAD;
 			++TOTAL_DEADS;
 		} 	
-		++score;
 	}
 	else if (pos.x + upDinoWidth > 0)
 	{
@@ -126,7 +130,7 @@ void Dino::draw()
 		case Dino::State::FALLING:
 		case Dino::State::JUMPING:
 			DrawTexturePro(upDino[color], 
-					{0, 0, upDinoWidth, upDinoHeight}, 
+					{0, 0, upDinoWidth, upDinoHeight - 1}, 
 					{pos.x, pos.y, upDinoWidth, upDinoHeight}, {0}, 0, RAYWHITE);
 			break;
 

@@ -7,7 +7,7 @@
 #define screen_width 1280
 #define screen_height 720
 
-#define TOTAL_DINOS 10
+#define TOTAL_DINOS 1000
 #define TOTAL_DINO_COLORS 7
 #define GRAVITY 5
 #define DEFAULT_MAP_VEL 6.0;

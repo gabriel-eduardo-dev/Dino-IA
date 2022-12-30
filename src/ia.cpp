@@ -39,6 +39,16 @@ void Neuron::mutate()
 	bias += mutate_dist(mt);
 }
 
+void Neuron::set_random_weights()
+{
+	for (auto& weight : weights) {
+
+		weight = max_dist(mt);
+	}
+	bias = max_dist(mt);
+
+}
+
 Layer::Layer(size_t num_neurons, size_t num_inputs_per_neuron)
 {
 	for (size_t i = 0; i < num_neurons; i++) {
@@ -76,6 +86,7 @@ std::vector<double> NeuralNetWork::feedforward(const std::vector<double> &inputs
 	std::vector<double> outputs = inputs;
 	for (size_t i = 0; i < layers.size(); i++) {
 		outputs = layers[i].feedforward(outputs);
+		outputs[i] = relu(outputs[i]);
 	}
 	return outputs;
 }
@@ -89,6 +100,12 @@ void NeuralNetWork::mutate()
 
 Candidate::Candidate(std::vector<int32_t> topology)
 	: rna(topology), dino(), fitness(0.0f)
+{
+
+}
+
+Candidate::Candidate()
+	: rna ({6, 6, 2})
 {
 
 }
@@ -109,11 +126,16 @@ void IA::Init()
 			[](const Candidate& a, const Candidate& b) {
 				return a.fitness > b.fitness;
 			});
-		const auto best_candidate = population[0].rna;
+		const auto best_candidate = population[0];
+		if (best_fitness < best_candidate.fitness) {
+			best_fitness = best_candidate.fitness;
+			best = best_candidate;
+		}
 		for (auto& [rna, dino, fitness] : population)
 		{
-			rna = best_candidate;
+			rna = best.rna;
 			rna.mutate();
+			fitness = 0.0f;
 			dino = Dino();
 		}
 	}
@@ -123,25 +145,29 @@ void IA::Update()
 {
 	for (auto& [rna, dino, fitness] : population)
 	{
+		if (dino.pos.x < -downDinoWidth) {
+			continue;
+		}
 		std::vector<double> outputs =
 			// inputs
 			rna.feedforward({
 				dino.pos.y,
+				dino.pos.x,
 				dino.obstacleDistance,
 				dino.nearestObstacle.pos.y,
 				dino.nearestObstacle.width,
-				dino.nearestObstacle.height,
 				map_velocity
 			});
-
 		if (outputs[0] > 0 && dino.onGround) {
 			dino.setState(Dino::State::JUMPING);
 		}
-		if (outputs[1] > 0 && !dino.onGround) {
+		if (outputs[1] > 0) {
 			dino.setState(Dino::State::DOWN_RUNNING);
 		}
-		fitness = dino.obstacles_passed;
 		dino.update();
+		if (dino.state != Dino::State::DEAD) {
+			fitness += 0.01f;
+		}
 	}
 	if (TOTAL_DEADS == TOTAL_DINOS)
 	{
@@ -152,7 +178,6 @@ void IA::Update()
 		IA::Init();
 		Obstacle::Init();
 	}
-
 }
 
 void IA::Draw()

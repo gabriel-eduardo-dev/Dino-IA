@@ -5,6 +5,7 @@
 #include <raylib.h>
 #include <iostream>
 #include <unordered_map>
+#include <cmath>
 
 #include "global.hpp"
 #include "obstacle.hpp"

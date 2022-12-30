@@ -17,6 +17,7 @@ float MAX_RANGE = 1000.0f;
 float GENERATION = 1.0f;
 bool update_texture = false; // dino
 int32_t TOTAL_DEADS = 0;
+float best_fitness = 0.0f;
 
 float frame_rate = 60.0f;
 
@@ -122,6 +123,9 @@ static void Draw()
 	DrawText(TextFormat("Map vel: %0.2f", map_velocity), screen_width - 200, 25, 20, LIME);
 	DrawText(TextFormat("Generation: %0.0f", GENERATION), screen_width - 200, 50, 20, LIME);
 	DrawText(TextFormat("Dead dinos: %i", TOTAL_DEADS), screen_width - 200, 75, 20, LIME);
+	DrawText(TextFormat("Best Fitness: %0.2f", best_fitness), screen_width - 200, 100, 20, LIME);
+	DrawText(TextFormat("MOUSE %i , %i", GetMouseX(), GetMouseY()), 50, 50, 20, RED);
+
 
     // Ground
 	DrawTexturePro(ground, Rectangle{ground_x, 0, static_cast<float>(ground.width), static_cast<float>(ground.height)}, Rectangle{0, ground_pos_y - 15, screen_width, static_cast<float>(ground.height)}, Vector2{0}, 0, RAYWHITE);

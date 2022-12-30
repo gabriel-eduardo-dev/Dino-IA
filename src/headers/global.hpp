@@ -23,7 +23,8 @@ extern float map_velocity;
 extern float MAX_RANGE;
 extern float GENERATION;
 extern int32_t TOTAL_DEADS;
+extern float best_fitness;
 
-#define ground_pos_y screen_height - 60
+#define ground_pos_y screen_height - 50
 
 #endif // !GLOBAL_HPP

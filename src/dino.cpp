@@ -50,11 +50,8 @@ void Dino::update()
 	{
 		(update_texture && ++texture > 2) ? texture = 1 : texture;	
 
-		const auto [newObstacle, obstacleDistance] = getNearestObstacle(pos.x);
-		if (newObstacle.pos.x != nearestObstacle.pos.x) {
-			nearestObstacle = newObstacle;
-			obstacles_passed += 1;
-		}
+		auto [a, obstacleDistance] = getNearestObstacle(pos.x);
+		this->nearestObstacle = a;
 
 		// GRAVITY 
 		if (state == Dino::State::JUMPING) {

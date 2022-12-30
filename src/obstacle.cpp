@@ -25,7 +25,7 @@ std::tuple<Obstacle, float> getNearestObstacle(int32_t dino_pos_x)
 	float distance = 0.0f;
 	for (const auto& obs : Obstacle::obstacles)
 	{
-		float distance_obs = (obs.pos.x + obs.width) - dino_pos_x ;
+		float distance_obs = obs.pos.x - dino_pos_x ;
 		if (distance_obs > 0 && distance_obs < nearest_obstacle.pos.x) {
 			nearest_obstacle = obs;
 			distance = distance_obs;

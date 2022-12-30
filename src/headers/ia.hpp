@@ -22,6 +22,7 @@ class Neuron
 		Neuron(size_t num_inputs);
 		double feedforward(const std::vector<double>& inputs);
 		void mutate();
+		void set_random_weights();
 		friend class IA;
 };
 
@@ -56,6 +57,7 @@ class NeuralNetWork
 struct Candidate
 {
 	Candidate(std::vector<int32_t> topology);
+	Candidate();
 	NeuralNetWork rna;
 	Dino dino;
 	double fitness;
@@ -72,6 +74,7 @@ class IA
 	private:
 
 		inline static std::vector<Candidate> population;
+		inline static Candidate best;
 };
 
 #endif // !IA_HPP

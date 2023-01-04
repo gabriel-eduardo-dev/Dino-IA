@@ -1,12 +1,12 @@
 #include "headers/ia.hpp"
 #include <vector>
 
-constexpr double RANDOM_MAX = 1.0f;
+constexpr double RANDOM_MAX = 1000.0f;
 
 std::random_device rd;
 std::mt19937 mt(rd());
-std::uniform_real_distribution<double> max_dist(-RANDOM_MAX, RANDOM_MAX);
-std::uniform_real_distribution<double> mutate_dist(-1.f, 1.f);
+std::uniform_real_distribution<double> max_dist(-(RANDOM_MAX), RANDOM_MAX);
+std::uniform_real_distribution<double> mutate_dist(-10.f, 10.f);
 
 // Activation function
 double relu(double x) {
@@ -127,6 +127,8 @@ void IA::Init()
 {
 	if (GENERATION == 1)
 	{
+		std::ofstream ofs("weights.txt", std::ios_base::trunc);
+		ofs.close();
 		population.clear();
 		population.reserve(TOTAL_DINOS);
 		for (size_t i = 0; i < TOTAL_DINOS; i++) {
@@ -144,7 +146,29 @@ void IA::Init()
 			best_fitness = best_candidate.fitness;
 			best = best_candidate;
 		}
-		std::cout << best_candidate.fitness << std::endl;
+		std::ofstream ofs("weights.txt", std::ios_base::app);
+		ofs << "\nGeneration: " << GENERATION << "\nInput:\n";
+		for (const auto& in : best_candidate.rna.inputs.neurons) {
+			ofs << '\n';
+			for (const auto& weight : in.weights) {
+				ofs << "\t" << weight << '\n';
+			}
+		}
+		ofs << "\n\nHidden:\n";
+		for (const auto& in : best_candidate.rna.hiddens.neurons) {
+			ofs << '\n';
+			for (const auto& weight : in.weights) {
+				ofs << "\t" << weight << '\n';
+			}
+		}
+		ofs << "\n\nOutput:\n";
+		for (const auto& in : best_candidate.rna.outputs.neurons) {
+			ofs << '\n';
+			for (const auto& weight : in.weights) {
+				ofs << "\t" << weight << '\n';
+			}
+		}
+		ofs.close();
 		for (size_t i = 0; i < population.size(); i++)
 		{
 			if (i % 2 == 0)
@@ -183,7 +207,7 @@ void IA::Update()
 			rna.feedforward({
 				dino.pos.y,
 				dino.pos.x,
-				dino.obstacleDistance,
+				dino.nearestObstacle.pos.x,
 				dino.nearestObstacle.pos.y,
 				dino.nearestObstacle.width,
 				map_velocity
@@ -195,7 +219,7 @@ void IA::Update()
 			dino.setState(Dino::State::DOWN_RUNNING);
 		}
 		dino.update();
-		if (dino.state != Dino::State::DEAD) {
+		if (dino.state != Dino::State::DEAD && dino.nearestObstacle.pos.x <= dino.pos.x + downDinoWidth) {
 			fitness += 0.01f;
 		}
 	}

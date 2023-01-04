@@ -95,7 +95,7 @@ void Dino::update()
 				Rectangle{pos.x, pos.y, 
 					static_cast<float>((state == Dino::State::DOWN_RUNNING) ? downDinoWidth : upDinoWidth), 
 					static_cast<float>((state == Dino::State::DOWN_RUNNING) ? downDinoHeight : upDinoHeight)}, 
-				Rectangle{nearestObstacle.pos.x + 5, nearestObstacle.pos.y + 5, nearestObstacle.width - 5, nearestObstacle.height - 5}))
+				Rectangle{nearestObstacle.pos.x, nearestObstacle.pos.y, nearestObstacle.width, nearestObstacle.height}))
 		{
 			state = Dino::State::DEAD;
 			++TOTAL_DEADS;

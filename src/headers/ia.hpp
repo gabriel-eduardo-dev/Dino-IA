@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <raylib.h>
+#include <fstream>
 
 #include "global.hpp"
 #include "dino.hpp"

@@ -1,15 +1,16 @@
 #include "headers/ia.hpp"
+#include <vector>
 
 constexpr double RANDOM_MAX = 1.0f;
 
 std::random_device rd;
 std::mt19937 mt(rd());
 std::uniform_real_distribution<double> max_dist(-RANDOM_MAX, RANDOM_MAX);
-std::uniform_real_distribution<double> mutate_dist(-0.1f, 0.1f);
+std::uniform_real_distribution<double> mutate_dist(-1.f, 1.f);
 
 // Activation function
 double relu(double x) {
-	return std::max(x, 0.0);
+	return (x > 0) ? x : 0;
 }
 
 Neuron::Neuron(size_t num_inputs)
@@ -39,14 +40,13 @@ void Neuron::mutate()
 	bias += mutate_dist(mt);
 }
 
-void Neuron::set_random_weights()
+void Neuron::rand_weights()
 {
 	for (auto& weight : weights) {
 
 		weight = max_dist(mt);
 	}
 	bias = max_dist(mt);
-
 }
 
 Layer::Layer(size_t num_neurons, size_t num_inputs_per_neuron)
@@ -59,6 +59,7 @@ Layer::Layer(size_t num_neurons, size_t num_inputs_per_neuron)
 std::vector<double> Layer::feedforward(const std::vector<double> &inputs)
 {
 	std::vector<double> outputs;
+	outputs.reserve(neurons.size());
 	for (size_t i = 0; i < neurons.size(); i++) {
 		outputs.push_back(neurons[i].feedforward(inputs));
 	}
@@ -72,40 +73,52 @@ void Layer::mutate()
 	}
 }
 
-NeuralNetWork::NeuralNetWork(const std::vector<int32_t>& topology)
+void Layer::rand_weights()
 {
-	size_t num_inputs = topology[0];
-	for (size_t i = 1; i < topology.size(); i++) {
-		layers.push_back(Layer(topology[i], num_inputs));
-		num_inputs = topology[i];
+	for (auto& neuron : neurons)
+	{
+		neuron.rand_weights();
 	}
 }
 
-std::vector<double> NeuralNetWork::feedforward(const std::vector<double> &inputs)
+NeuralNetWork::NeuralNetWork(int32_t _inputs, int32_t _hiddens, int32_t _outputs)
+	: inputs(_inputs, _inputs), hiddens(_inputs, _inputs), outputs(_outputs, _inputs)
 {
-	std::vector<double> outputs = inputs;
-	for (size_t i = 0; i < layers.size(); i++) {
-		outputs = layers[i].feedforward(outputs);
-		outputs[i] = relu(outputs[i]);
-	}
-	return outputs;
+
+}
+
+std::vector<double> NeuralNetWork::feedforward(const std::vector<double> &_inputs)
+{
+	auto in_result = inputs.feedforward(_inputs);
+	auto hidden_result = hiddens.feedforward(in_result);
+	auto out_result = outputs.feedforward(hidden_result);
+	return out_result;
 }
 
 void NeuralNetWork::mutate()
 {
-	for (auto& layer : layers) {
-		layer.mutate();
-	}
+	inputs.mutate();
+	hiddens.mutate();
+	outputs.mutate();
 }
 
-Candidate::Candidate(std::vector<int32_t> topology)
-	: rna(topology), dino(), fitness(0.0f)
+
+void NeuralNetWork::rand_weights()
+{
+	inputs.rand_weights();
+	hiddens.rand_weights();
+	outputs.rand_weights();
+}
+
+
+Candidate::Candidate(int32_t inputs, int32_t hiddens, int32_t outputs)
+	: rna(inputs, hiddens, outputs), dino(), fitness(0.0f)
 {
 
 }
 
 Candidate::Candidate()
-	: rna ({6, 6, 2})
+	: rna (INPUTS_LAYER_SIZE, HIDDENS_LAYER_SIZE, OUTPUTS_LAYER_SIZE)
 {
 
 }
@@ -117,7 +130,7 @@ void IA::Init()
 		population.clear();
 		population.reserve(TOTAL_DINOS);
 		for (size_t i = 0; i < TOTAL_DINOS; i++) {
-			population.push_back(Candidate({6, 6, 2}));
+			population.push_back(Candidate(INPUTS_LAYER_SIZE, HIDDENS_LAYER_SIZE, OUTPUTS_LAYER_SIZE));
 		}
 	}
 	else 
@@ -130,6 +143,23 @@ void IA::Init()
 		if (best_fitness < best_candidate.fitness) {
 			best_fitness = best_candidate.fitness;
 			best = best_candidate;
+		}
+		std::cout << best_candidate.fitness << std::endl;
+		for (size_t i = 0; i < population.size(); i++)
+		{
+			if (i % 2 == 0)
+			{
+				population[i].rna = best_candidate.rna;
+				population[i].rna.mutate();
+				population[i].dino = Dino();
+				population[i].fitness = 0.0f;
+			}
+			else
+			{
+				population[i].rna.rand_weights();
+				population[i].dino = Dino();
+				population[i].fitness = 0.0f;
+			}
 		}
 		for (auto& [rna, dino, fitness] : population)
 		{

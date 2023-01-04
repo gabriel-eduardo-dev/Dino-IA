@@ -12,6 +12,10 @@
 #define GRAVITY 5
 #define DEFAULT_MAP_VEL 6.0;
 
+#define INPUTS_LAYER_SIZE 6
+#define HIDDENS_LAYER_SIZE 6
+#define OUTPUTS_LAYER_SIZE 2
+
 extern Texture2D ground;
 extern Texture2D upDino[TOTAL_DINO_COLORS];
 extern Texture2D downDino[TOTAL_DINO_COLORS];

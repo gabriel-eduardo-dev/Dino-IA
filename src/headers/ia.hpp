@@ -22,8 +22,9 @@ class Neuron
 		Neuron(size_t num_inputs);
 		double feedforward(const std::vector<double>& inputs);
 		void mutate();
-		void set_random_weights();
+		void rand_weights();
 		friend class IA;
+		friend class NeuralNetWork;
 };
 
 class Layer 
@@ -35,28 +36,35 @@ class Layer
 	public:
 
         Layer(size_t num_neurons, size_t num_inputs_per_neuron);
-        std::vector<double> feedforward(const std::vector<double>& inputs);
+        std::vector<double> feedforward(const std::vector<double>& _inputs);
 		void mutate();
+		void rand_weights();
 		friend class IA;
+		friend class NeuralNetWork;
 };
 
 class NeuralNetWork
 {
 	private:
 
-		std::vector<Layer> layers;
+		Layer inputs;
+		Layer hiddens;
+		Layer outputs;
 
 	public:
 
-		NeuralNetWork(const std::vector<int32_t>& topology);
+		NeuralNetWork(int32_t _inputs, int32_t _hiddens, int32_t _outputs);
+
 		std::vector<double> feedforward(const std::vector<double>& inputs);
 		void mutate();
+		void rand_weights();
+
 		friend class IA;
 };
 
 struct Candidate
 {
-	Candidate(std::vector<int32_t> topology);
+	Candidate(int32_t inputs, int32_t hiddens, int32_t outputs);
 	Candidate();
 	NeuralNetWork rna;
 	Dino dino;

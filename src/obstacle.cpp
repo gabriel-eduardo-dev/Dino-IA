@@ -115,26 +115,26 @@ void Obstacle::Draw()
 		{
 			case BIRD:
 				DrawTexturePro(bird, 
-					{static_cast<float>(obs.texture * birdWidth), 0, birdWidth, birdHeight},
+					{static_cast<float>(obs.texture * birdWidth), 0, obs.width, obs.height},
 					{obs.pos.x, obs.pos.y, birdWidth, birdHeight}, {0}, 0, RAYWHITE);
 				break;
 
 			case SMALL_CACTU:
 				DrawTexturePro(smallCactus, 
 					{0, 0, static_cast<float>(obs.texture * smallCactuWidth), smallCactuHeight},
-					{obs.pos.x, obs.pos.y, static_cast<float>(obs.texture * smallCactuWidth), smallCactuHeight}, {0}, 0, RAYWHITE);
+					{obs.pos.x, obs.pos.y, obs.width, obs.height}, {0}, 0, RAYWHITE);
 				break;
 
 			case BIG_CACTU:
 				DrawTexturePro(bigCactus, 
 					{0, 0, static_cast<float>(obs.texture * bigCactuWidth), bigCactuHeight},
-					{obs.pos.x, obs.pos.y, static_cast<float>(obs.texture * bigCactuWidth), bigCactuHeight}, Vector2{0}, 0, RAYWHITE);
+					{obs.pos.x, obs.pos.y, obs.width, obs.height}, Vector2{0}, 0, RAYWHITE);
 				break;
 
 			case ESPECIAL_CACTU:
 				DrawTexturePro(especialCactu, 
 					{0, 0, specialCactuWidth, specialCactuHeight},
-					{obs.pos.x, obs.pos.y, specialCactuWidth, specialCactuHeight}, {0}, 0, RAYWHITE);
+					{obs.pos.x, obs.pos.y, obs.width, obs.height}, {0}, 0, RAYWHITE);
 				break;
 		}	
 	}

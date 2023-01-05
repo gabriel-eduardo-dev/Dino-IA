@@ -122,32 +122,35 @@ void Dino::update()
 
 void Dino::draw()
 {
-	switch (state)
+	if (pos.x + downDinoWidth > 0)
 	{
-		case Dino::State::FALLING:
-		case Dino::State::JUMPING:
-			DrawTexturePro(upDino[color], 
-					{0, 0, upDinoWidth, upDinoHeight - 1}, 
-					{pos.x, pos.y, upDinoWidth, upDinoHeight}, {0}, 0, RAYWHITE);
-			break;
+		switch (state)
+		{
+			case Dino::State::FALLING:
+			case Dino::State::JUMPING:
+				DrawTexturePro(upDino[color], 
+						{0, 0, upDinoWidth, upDinoHeight - 1}, 
+						{pos.x, pos.y, upDinoWidth, upDinoHeight}, {0}, 0, RAYWHITE);
+				break;
 
-		case Dino::State::UP_RUNNING:
-			DrawTexturePro(upDino[color],
-					{static_cast<float>(texture * upDinoWidth), 0, upDinoWidth, upDinoHeight},
-					{pos.x, pos.y, upDinoWidth, upDinoHeight}, {0}, 0, RAYWHITE);
-			break;
+			case Dino::State::UP_RUNNING:
+				DrawTexturePro(upDino[color],
+						{static_cast<float>(texture * upDinoWidth), 0, upDinoWidth, upDinoHeight},
+						{pos.x, pos.y, upDinoWidth, upDinoHeight}, {0}, 0, RAYWHITE);
+				break;
 
-		case Dino::State::DOWN_RUNNING:
-			DrawTexturePro(downDino[color],
-					{static_cast<float>(texture * downDinoWidth), 0, downDinoWidth, downDinoHeight},
-					{pos.x, pos.y, downDinoWidth, downDinoHeight}, {0}, 0, RAYWHITE);
-			break;
+			case Dino::State::DOWN_RUNNING:
+				DrawTexturePro(downDino[color],
+						{static_cast<float>(texture * downDinoWidth), 0, downDinoWidth, downDinoHeight},
+						{pos.x, pos.y, downDinoWidth, downDinoHeight}, {0}, 0, RAYWHITE);
+				break;
 
-		case Dino::State::DEAD:
-			DrawTexturePro(upDino[color],
-					{static_cast<float>(upDino[0].width - upDinoWidth), 0, upDinoWidth, upDinoHeight},
-					{pos.x, pos.y, upDinoWidth, upDinoHeight}, {0}, 0, RAYWHITE);
-			break;
+			case Dino::State::DEAD:
+				DrawTexturePro(upDino[color],
+						{static_cast<float>(upDino[0].width - upDinoWidth), 0, upDinoWidth, upDinoHeight},
+						{pos.x, pos.y, upDinoWidth, upDinoHeight}, {0}, 0, RAYWHITE);
+				break;
+		}
 	}
 }
 

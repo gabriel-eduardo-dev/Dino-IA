@@ -91,7 +91,7 @@ static void Update()
 		SetTargetFPS(frame_rate);
 	}
 
-	if (map_velocity < 20.0f) {
+	if (map_velocity < 15.0f) {
 		map_velocity += 0.001;
 	}
 	ground_x += map_velocity;

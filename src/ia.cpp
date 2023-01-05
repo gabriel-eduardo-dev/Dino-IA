@@ -1,12 +1,13 @@
 #include "headers/ia.hpp"
 #include <vector>
 
-constexpr double RANDOM_MAX = 1000.0f;
+constexpr double RANDOM_MAX = 1.0f;
+constexpr double MUTATE_MAX = 0.5f;
 
 std::random_device rd;
 std::mt19937 mt(rd());
 std::uniform_real_distribution<double> max_dist(-(RANDOM_MAX), RANDOM_MAX);
-std::uniform_real_distribution<double> mutate_dist(-10.f, 10.f);
+std::uniform_real_distribution<double> mutate_dist(-(MUTATE_MAX), MUTATE_MAX);
 
 // Activation function
 double relu(double x) {
@@ -147,7 +148,7 @@ void IA::Init()
 			best = best_candidate;
 		}
 		std::ofstream ofs("weights.txt", std::ios_base::app);
-		ofs << "\nGeneration: " << GENERATION << "\nInput:\n";
+		ofs << "\nGeneration: " << GENERATION << "\nBest Fitness: " << best_candidate.fitness << "\nInput:\n";
 		for (const auto& in : best_candidate.rna.inputs.neurons) {
 			ofs << '\n';
 			for (const auto& weight : in.weights) {
@@ -173,7 +174,7 @@ void IA::Init()
 		{
 			if (i % 2 == 0)
 			{
-				population[i].rna = best_candidate.rna;
+				population[i].rna = best.rna;
 				population[i].rna.mutate();
 				population[i].dino = Dino();
 				population[i].fitness = 0.0f;
@@ -205,12 +206,13 @@ void IA::Update()
 		std::vector<double> outputs =
 			// inputs
 			rna.feedforward({
-				dino.pos.y,
 				dino.pos.x,
+				dino.pos.y,
 				dino.nearestObstacle.pos.x,
 				dino.nearestObstacle.pos.y,
 				dino.nearestObstacle.width,
-				map_velocity
+				dino.nearestObstacle.height,
+				map_velocity,
 			});
 		if (outputs[0] > 0 && dino.onGround) {
 			dino.setState(Dino::State::JUMPING);
@@ -219,7 +221,7 @@ void IA::Update()
 			dino.setState(Dino::State::DOWN_RUNNING);
 		}
 		dino.update();
-		if (dino.state != Dino::State::DEAD && dino.nearestObstacle.pos.x <= dino.pos.x + downDinoWidth) {
+		if (dino.state != Dino::State::DEAD) {
 			fitness += 0.01f;
 		}
 	}

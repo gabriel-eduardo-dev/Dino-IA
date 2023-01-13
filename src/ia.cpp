@@ -186,13 +186,6 @@ void IA::Init()
 				population[i].fitness = 0.0f;
 			}
 		}
-		for (auto& [rna, dino, fitness] : population)
-		{
-			rna = best.rna;
-			rna.mutate();
-			fitness = 0.0f;
-			dino = Dino();
-		}
 	}
 }
 
